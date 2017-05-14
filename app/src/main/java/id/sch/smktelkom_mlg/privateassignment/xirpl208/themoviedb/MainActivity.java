@@ -15,8 +15,6 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public Fragment fragment = null;
-    public Bundle bundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +32,9 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        changePage(R.id.nav_popular);
+        navigationView.setCheckedItem(R.id.nav_popular);
     }
 
     @Override
@@ -72,25 +73,35 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        changePage(id);
+        return true;
+    }
 
-        fragment = null;
+    private void changePage(int id) {
 
-        bundle = new Bundle();
+        Fragment fragment = null;
 
         if (id == R.id.nav_popular) {
+            fragment = new FragmentMainGrid();
             setTitle("Popular");
         } else if (id == R.id.nav_toprated) {
+            fragment = new FragmentMainGrid();
             setTitle("Top Rated");
         } else if (id == R.id.nav_upcoming) {
+            fragment = new FragmentMainGrid();
             setTitle("Upcoming");
         } else if (id == R.id.nav_nowplaying) {
-            setTitle("NowPlaying");
+            fragment = new FragmentMainGrid();
+            setTitle("Now Playing");
         } else if (id == R.id.nav_save) {
+            fragment = new FragmentSaved();
             setTitle("Save");
         }
 
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitNow();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-        return true;
+
     }
 }
